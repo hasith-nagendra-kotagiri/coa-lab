@@ -1,17 +1,23 @@
-ORG 100h                
+org 100h               ; Origin for COM file format
+jmp start:
+output db "The alphabets from Z-A: $ "
+start:
+mov dx,offset output 
+mov ah,09h
+int 21h
+; Print characters from 'Z' to 'A'
+mov cx, 26             ; Loop counter set to 26 (for letters A to Z)
+mov al, 'Z'            ; Start with the character 'Z'
+print:
+    ; Print the character
+    mov dl, al         ; Move the character to DL
+    mov ah, 02h        ; DOS function 02h: print character
+    int 21h            ; Call DOS interrupt
+    ; Prepare for the next iteration
+    dec al             ; Move to the previous character
+    loop print         ; Loop until CX is zero
 
-MOV CX, 26             ; Set loop counter for 26 letters (A-Z)
-MOV AL, 'Z'            ; Initialize AL with ASCII value of 'Z'
-
-print_loop:
-    MOV DL, AL         ; Move AL (current letter) to DL for printing
-    MOV AH, 02h        ; DOS function to print character
-    INT 21h            ; Call DOS interrupt to print character
-
-    DEC AL             ; Move to the previous letter (e.g., from 'Z' to 'Y')
-    LOOP print_loop    ; Decrement CX and repeat if CX is not zero
-
-MOV AH, 4Ch            ; DOS function to terminate program
-INT 21h                
-
-END
+; Terminate the program
+mov ah, 4Ch            ; DOS function 4Ch: terminate program
+int 21h                ; Call DOS interrupt to exit
+end                     ; End of program
