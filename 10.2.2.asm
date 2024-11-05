@@ -1,19 +1,25 @@
+org 100h               ; Origin for COM file format
+mov dx,offset output 
+mov ah,09h
+int 21h
 
-org 100h
+; Print characters from 'A' to 'Z'
+mov cx, 26             ; Loop counter set to 26 (for letters A to Z)
+mov al, 'A'            ; Start with the character 'A'
 
-mov cx,26
-mov ax,A
+print:
+    ; Print the character
+    mov dl, al         ; Move the character to DL
+    mov ah, 02h        ; DOS function 02h: print character
+    int 21h            ; Call DOS interrupt
 
-prin_loop:
-   mov al,0
-   mov dl,al
-   mov al,02h
-   int 21h
-    
-   inc al
+    ; Prepare for the next iteration
+    inc al             ; Move to the next character
+    loop print         ; Loop until CX is zero
 
-ret
-
-
-
-
+; Terminate the program
+mov ah, 4Ch            ; DOS function 4Ch: terminate program
+int 21h                ; Call DOS interrupt to exit
+ 
+output db "The alphabets from A-Z: $ " 
+end                     ; End of program
